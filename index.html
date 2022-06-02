@@ -1,26 +1,150 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Alpine Expensive Items</title>
-    <!-- <script defer src="/dist/app.js"></script> -->
-    <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.8.0/dist/alpine.min.js" defer></script>
+   <meta charset="UTF-8">
+   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <link rel="stylesheet" href="./src/css/bootstrap.min.css">
+   <link rel="stylesheet" href="./src/css/style.css">
+   <title>Alpine Expensive Items</title>
+   <script defer src="./dist/app.js"></script>
+   <!-- <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.8.0/dist/alpine.min.js" defer></script> -->
 
 
 </head>
+
 <body>
-    <h2 class="container">Most Expensive Items</h2>
-    <button class="btn btn-primary">The Button</button>
-    <div x-data="{ 
-        title: 'Most Expensive Items from Alpine',
-        items: []
-    }">
 
-    <h1 x-text="title"></h1>
+   <div x-data="{ 
+            title: 'Most Expensive Items',
+            items: [
+               {name : 'apples', qty : 10},
+               {name : 'pears', qty : 37},
+               {name : 'bananas', qty : 27},
+               {name : 'oranges', qty : 3},
+            ],
+            quantity: 0,
+            message: '',
+            checked: false
+        }">
+      <div class="container">
 
-    </div>
-    
+         <h2 class="d-flex justify-content-center mt-4" x-text="title"></h2>
+         <div class="row mt-5 justify-content-center">
+            <div class="card">
+               <div class="d-flex mt-4 ml-4 mb-5" style="justify-content: space-between;">
+                  <div class="byQty mr-3">
+                     <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="checkbox" x-model="checked">
+                        <label class="form-check-label" for="checkbox">
+                           Items Over 20
+                        </label>
+                     </div>
+
+                     <form class="form-inline mt-3">
+                        Items Over:
+                        <div class="form-group mx-sm-3">
+                           <label for="inputPassword2" class="sr-only">Custom filter</label>
+                           <input type="number" class="form-control" id="inputPassword2" placeholder="Custom filter"
+                              x-model.number="quantity">
+                        </div>
+                     </form>
+                  </div>
+
+                  <div class="mr-4">
+                     <button class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" style="background-color: #219ebc;">Add new
+                        Item</button>
+                  </div>
+
+               </div>
+
+               <div class="itemsElem mb-5" style="display: flex;" x-show="!checked">
+                  <template x-for="item in items.filter(item => item.qty >= quantity);">
+                     <span class="itemElem ml-4">
+                        <span x-text="item.name"></span>
+                        (<span x-text="item.qty"></span>)
+                     </span>
+                  </template>
+               </div>
+
+               <div class="itemsElem mb-5" style="display: flex;" x-show="checked">
+                  <template x-for="item in items.filter(item => item.qty >= 20);">
+                     <span class="itemElem ml-4">
+                        <span x-text="item.name"></span>
+                        (<span x-text="item.qty"></span>)
+                     </span>
+                  </template>
+               </div>
+
+               <div class="message mt-5" style=" text-align:center; margin: 0em 10em 0em 10em;">
+                  <h3 class="alert alert-info" role="alert" x-text="message = '5 items are greater than 20.'"></h3>
+
+                  <template x-if="cupcakeCounter > muffinCounter && muffinCounter == 0">
+                     <h3 class="alert alert-info" role="alert" x-text="message = '5 items are greater than 20.'"></h3>
+                  </template>
+               </div>
+
+            </div>
+         </div>
+
+
+         <!-- Modal -->
+         <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-sm">
+               <div class="modal-content">
+                  <div class="modal-header">
+                     <h5 class="modal-title" id="exampleModalLabel">Add New Item</h5>
+                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                     </button>
+                  </div>
+                  <div class="modal-body">
+                     <form>
+                        <div class="form-group">
+                          <label for="formGroupExampleInput">Name</label>
+                          <input type="text" class="form-control" id="formGroupExampleInput" placeholder="Enter item name">
+                        </div>
+                        <div class="form-group">
+                          <label for="formGroupExampleInput2">Quantity</label>
+                          <input type="text" class="form-control" id="formGroupExampleInput2" placeholder="Enter quantity">
+                        </div>
+                      </form>
+                  </div>
+                  <div class="modal-footer">
+                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                     <button type="button" class="btn btn-primary">Add Item</button>
+                  </div>
+               </div>
+            </div>
+         </div>
+
+      </div>
+
+
+
+
+
+
+
+
+   </div>
+
+
+
+
+
+
+   <script defer src="./src/js/jquery.js"></script>
+   <script defer src="./src/js/bootstrap.min.js"></script>
+   <script>
+      let muffinCounter = 0;
+      let cupcakeCounter = 0;
+
+      function sellMuffin() {
+         return muffinCounter++;
+      }
+   </script>
 </body>
+
 </html>
