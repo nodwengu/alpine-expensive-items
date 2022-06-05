@@ -26,71 +26,82 @@
             ],
             quantity: 0,
             message: '',
-            checked: false
+            checked: false,
+            nameInput: '',
+            qtyInput: 0,
+            filteredList: [],
+            showMsg() {
+               if(this.quantity > 0 && this.checked == false) {
+                  this.message = this.items.filter(item => item.qty >= this.quantity).length + 
+                        ' items qty is greater/equal to ' + this.quantity
+                  return true
+               } else if(this.checked == true) {
+                  this.message = this.items.filter(item => item.qty >= 20).length + 
+                        ' items qty is greater than ' + 20
+                  return true
+               }
+            },
+            filteredItems() {
+               if(!this.checked && this.quantity == 0) {
+                  this.filteredList = this.items
+               } else if(this.checked && this.quantity == 0) {
+                  this.filteredList = this.items.filter(item => item.qty >= 20)
+               } else if(!this.checked && this.quantity >= 0) {
+                  this.filteredList = this.items.filter(item => item.qty >= this.quantity)
+               }
+              
+               return this.filteredList
+            }
         }">
       <div class="container">
-
          <h2 class="d-flex justify-content-center mt-4" x-text="title"></h2>
          <div class="row mt-5 justify-content-center">
             <div class="card">
                <div class="d-flex mt-4 ml-4 mb-5" style="justify-content: space-between;">
                   <div class="byQty mr-3">
                      <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="checkbox" x-model="checked">
+                        <input class="form-check-input" type="checkbox" 
+                            x-model="checked" 
+                            @click="quantity = 0" 
+                        >
                         <label class="form-check-label" for="checkbox">
                            Items Over 20
                         </label>
                      </div>
-
                      <form class="form-inline mt-3">
                         Items Over:
                         <div class="form-group mx-sm-3">
-                           <label for="inputPassword2" class="sr-only">Custom filter</label>
-                           <input type="number" class="form-control" id="inputPassword2" placeholder="Custom filter"
-                              x-model.number="quantity">
+                           <label for="inputQty" class="sr-only">Custom filter</label>
+                           <input type="number" class="form-control" placeholder="Custom filter"
+                              x-model.number="quantity"
+                              x-on:change="checked = false" />
                         </div>
                      </form>
                   </div>
-
                   <div class="mr-4">
-                     <button class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" style="background-color: #219ebc;">Add new
+                     <button class="btn btn-primary" data-toggle="modal" data-target="#addItemModal" style="background-color: #219ebc;">Add new
                         Item</button>
                   </div>
-
                </div>
-
-               <div class="itemsElem mb-5" style="display: flex;" x-show="!checked">
-                  <template x-for="item in items.filter(item => item.qty >= quantity);">
-                     <span class="itemElem ml-4">
+               <div class="row itemsElem mb-5">
+                  <template x-for="item in filteredItems">
+                     <span class="col-lg-2 col-md-2 itemElem ml-4 mr-4 mt-2">
                         <span x-text="item.name"></span>
                         (<span x-text="item.qty"></span>)
                      </span>
                   </template>
                </div>
-
-               <div class="itemsElem mb-5" style="display: flex;" x-show="checked">
-                  <template x-for="item in items.filter(item => item.qty >= 20);">
-                     <span class="itemElem ml-4">
-                        <span x-text="item.name"></span>
-                        (<span x-text="item.qty"></span>)
-                     </span>
+               <div class="message mt-5 mb-5"  x-transition>
+                  <template x-if="showMsg">
+                     <h3 class="alert alert-info" role="alert" x-text="message"></h3>
                   </template>
                </div>
-
-               <div class="message mt-5" style=" text-align:center; margin: 0em 10em 0em 10em;">
-                  <h3 class="alert alert-info" role="alert" x-text="message = '5 items are greater than 20.'"></h3>
-
-                  <template x-if="cupcakeCounter > muffinCounter && muffinCounter == 0">
-                     <h3 class="alert alert-info" role="alert" x-text="message = '5 items are greater than 20.'"></h3>
-                  </template>
-               </div>
-
             </div>
          </div>
 
 
          <!-- Modal -->
-         <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+         <div class="modal fade" id="addItemModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-sm">
                <div class="modal-content">
                   <div class="modal-header">
@@ -103,31 +114,24 @@
                      <form>
                         <div class="form-group">
                           <label for="formGroupExampleInput">Name</label>
-                          <input type="text" class="form-control" id="formGroupExampleInput" placeholder="Enter item name">
+                          <input x-model="nameInput" type="text" class="form-control" placeholder="Enter item name">
                         </div>
                         <div class="form-group">
                           <label for="formGroupExampleInput2">Quantity</label>
-                          <input type="text" class="form-control" id="formGroupExampleInput2" placeholder="Enter quantity">
+                          <input x-model="qtyInput" type="number" class="form-control" placeholder="Enter quantity">
                         </div>
                       </form>
                   </div>
                   <div class="modal-footer">
                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                     <button type="button" class="btn btn-primary">Add Item</button>
+                     <button @click="items.push({name: nameInput, qty: qtyInput});" type="button" class="btn btn-primary">Add Item</button>
                   </div>
                </div>
             </div>
          </div>
 
+      
       </div>
-
-
-
-
-
-
-
-
    </div>
 
 

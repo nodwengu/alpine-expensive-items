@@ -5,7 +5,7 @@ body {
   
   .card {
     width: 70%;
-    height: 25em;
+    height: auto;
   }
 
   .itemElem {
@@ -15,6 +15,27 @@ body {
     padding: 5px;
     color: #fff;
     font-weight: 700;
+  }
+
+  .itemsElem {
+    display: flex;
+  }
+
+  .message {
+    text-align:center; 
+    margin: 0em 3em 0em 3em;
+  }
+
+  @media (max-width: 600px) {
+
+    .card {
+      width: 90%;
+    }
+
+    .message {
+      margin: 0em 1em 5em 1em;
+    }
+
   }
 
   
