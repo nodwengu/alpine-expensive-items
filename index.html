@@ -30,14 +30,18 @@
             nameInput: '',
             qtyInput: 0,
             filteredList: [],
+            itemsOver20(list) {
+               return list.filter(item => item.qty >= 20);
+            },
+            itemsOver(list) {
+               return list.filter(item => item.qty >= this.quantity);
+            },
             showMsg() {
                if(this.quantity > 0 && this.checked == false) {
-                  this.message = this.items.filter(item => item.qty >= this.quantity).length + 
-                        ' items qty is greater/equal to ' + this.quantity
+                  this.message = this.itemsOver(this.items).length + ' items qty is greater/equal to ' + this.quantity
                   return true
                } else if(this.checked == true) {
-                  this.message = this.items.filter(item => item.qty >= 20).length + 
-                        ' items qty is greater than ' + 20
+                  this.message = this.itemsOver20(this.items).length + ' items qty is greater than ' + 20
                   return true
                }
             },
@@ -134,20 +138,10 @@
       </div>
    </div>
 
-
-
-
-
-
    <script defer src="./src/js/jquery.js"></script>
    <script defer src="./src/js/bootstrap.min.js"></script>
    <script>
-      let muffinCounter = 0;
-      let cupcakeCounter = 0;
-
-      function sellMuffin() {
-         return muffinCounter++;
-      }
+     
    </script>
 </body>
 
